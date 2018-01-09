@@ -67,7 +67,7 @@ void multiStore(char *dest, unsigned char data, unsigned int count, char mode) {
 #define _CSV
 
 void testMoves(char  *dest, char *source, size_t size) {
-	const unsigned int N_FLIPS = 100000; 
+	const unsigned int N_FLIPS = 1000; 
 	clock_t start, stop;
 	char mode;
 
@@ -104,13 +104,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	char *block2 = uniBlock + BLOCK_SIZE ; //(char*) malloc(BLOCK_SIZE);
 	char *block3 = (char*) malloc(512 * 512);
 
+	unsigned int offset = 0;
+
 	printf("CLOCKS_PER_SEC = %d\n", CLOCKS_PER_SEC);
 	
 	printf("offset, memcpy, asmcpy, asmcpy2, asmcpy4\n");
 
-	unsigned int offset = 0;
 	for (offset = 0; offset < BLOCK_SIZE; ++offset) {
-		block2 = block1 + offset;
+		block2 = block1 + BLOCK_SIZE + offset;
 		printf("%d, ", offset);
 		testMoves(block2, block1, BLOCK_SIZE);
 		printf("\n");
