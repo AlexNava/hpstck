@@ -65,7 +65,7 @@ void multiStore(char *dest, unsigned char data, unsigned int count, char mode) {
 };
 
 const unsigned int N_FLIPS = 100000;
-const unsigned int BLOCK_SIZE = 1024 * 256;
+const unsigned int BLOCK_SIZE = 64 * 1024 + 20;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -82,7 +82,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		unsigned int i;
 
 		printf("Test mode %d\n", mode);
-		printf("%d 64k page flips... ", N_FLIPS);
+		printf("%d block moves of %d bytes... ", N_FLIPS, BLOCK_SIZE);
 		start = clock();
 		for (i = N_FLIPS; i > 0; --i) {
 			multiCopy(block2, block1, BLOCK_SIZE, mode);
