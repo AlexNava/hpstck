@@ -6,30 +6,30 @@
 
 void asmcpy(char *dest, char *src, unsigned int count) {
 	_asm{
-		mov edi, dest;
-		mov esi, src;
-		mov ecx, count;
-		rep movsb;
+		mov edi, dest
+		mov esi, src
+		mov ecx, count
+		rep movsb
 	}
 }
 
 void asmcpy2(char *dest, char *src, unsigned int count) {
 	_asm{
-		mov edi, dest;
-		mov esi, src;
-		mov ecx, count;
-		shr ecx, 1;
-		rep movsw;
+		mov edi, dest
+		mov esi, src
+		mov ecx, count
+		shr ecx, 1
+		rep movsw
 	}
 }
 
 void asmcpy4(char *dest, char *src, unsigned int count) {
 	_asm{
-		mov edi, dest;
-		mov esi, src;
-		mov ecx, count;
-		shr ecx, 2;
-		rep movsd;
+		mov edi, dest
+		mov esi, src
+		mov ecx, count
+		shr ecx, 2
+		rep movsd
 	}
 }
 
@@ -65,7 +65,7 @@ void multiStore(char *dest, unsigned char data, unsigned int count, char mode) {
 };
 
 const unsigned int N_FLIPS = 100000;
-const unsigned int BLOCK_SIZE = 64 * 1024 + 20;
+const unsigned int BLOCK_SIZE = 64 * 1024;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
