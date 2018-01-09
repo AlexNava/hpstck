@@ -26,11 +26,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	while (1)
 	{
 		hpBuf = (char*) malloc(1024);
-		memset(hpBuf, 0xab, 1024);
 		if (hpBuf)
 		{
 			//printf("Malloc'ed %d KiB (buf at 0x%x)\n", ++i, hpBuf);
 			++i;
+			memset(hpBuf, rand() & 0xff, 1024);
 			//free(hpBuf);
 		}
 		else
