@@ -64,39 +64,64 @@ void multiStore(char *dest, unsigned char data, unsigned int count, char mode) {
 	}
 };
 
-const unsigned int N_FLIPS = 100000;
+#define _CSV
+
+void testMoves(char  *dest, char *source, size_t size) {
+	const unsigned int N_FLIPS = 100000; 
+	clock_t start, stop;
+	char mode;
+
+	for (mode = 0; mode < 4; ++mode) {
+		unsigned int i;
+
+#ifndef _CSV
+		printf("Test mode %d\n", mode);
+		printf("%d block moves of %d bytes... ", N_FLIPS, size);
+#endif
+
+		start = clock();
+		for (i = N_FLIPS; i > 0; --i) {
+			multiCopy(dest, source, size, mode);
+		}
+		stop = clock();
+#ifndef _CSV
+		printf("%.3f seconds\n", (float)(stop - start) / CLOCKS_PER_SEC);
+#else
+		printf("%.3f", (float)(stop - start) / CLOCKS_PER_SEC);
+		if (mode != 3)
+			printf(", ");
+#endif
+
+	}
+}
+
 const unsigned int BLOCK_SIZE = 64 * 1024;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	char *block1 = (char*) malloc(BLOCK_SIZE);
-	char *block2 = (char*) malloc(BLOCK_SIZE);
+	char *uniBlock = (char*)malloc(BLOCK_SIZE * 4);
+	char *block1 = uniBlock; //(char*) malloc(BLOCK_SIZE);
+	char *block2 = uniBlock + BLOCK_SIZE ; //(char*) malloc(BLOCK_SIZE);
 	char *block3 = (char*) malloc(512 * 512);
-
-	clock_t start, stop;
-	char mode;
 
 	printf("CLOCKS_PER_SEC = %d\n", CLOCKS_PER_SEC);
 	
-	for (mode = 0; mode < 4; ++mode) {
-		unsigned int i;
+	printf("offset, memcpy, asmcpy, asmcpy2, asmcpy4\n");
 
-		printf("Test mode %d\n", mode);
-		printf("%d block moves of %d bytes... ", N_FLIPS, BLOCK_SIZE);
-		start = clock();
-		for (i = N_FLIPS; i > 0; --i) {
-			multiCopy(block2, block1, BLOCK_SIZE, mode);
-		}
-		stop = clock();
-		printf("%.3f seconds\n", (float)(stop - start) / CLOCKS_PER_SEC);
-
+	unsigned int offset = 0;
+	for (offset = 0; offset < BLOCK_SIZE; ++offset) {
+		block2 = block1 + offset;
+		printf("%d, ", offset);
+		testMoves(block2, block1, BLOCK_SIZE);
+		printf("\n");
 	}
 
 	printf("Press a key...");
 	getch();
 
-	free(block1);
-	free(block2);
+	free(uniBlock);
+	//free(block1);
+	//free(block2);
 	free(block3);
 	return 0;
 }
